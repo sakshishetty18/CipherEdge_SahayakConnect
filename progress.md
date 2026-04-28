@@ -32,3 +32,19 @@ Completed
 
 Next
 -Add volunteer dashboard
+
+Checkpoint 3 - 9:00 PM
+Completed
+-Volunteer dashboard created
+-Help requests displayed dynamically
+-Data integrated with form submissions (localStorage/array)
+
+In Progress
+-Accept / reject request functionality
+-Request status update system (Pending → Accepted → Completed)
+
+Next Steps
+-Implement admin dashboard
+-Add filtering (location / urgency / category)
+-Improve UI responsiveness
+
