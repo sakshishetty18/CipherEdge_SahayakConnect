@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Get Help — Sahayak Connect</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+      <div class="brand" onclick="window.location='index.html'">
+        <div class="brand-icon">🤝</div>
+        <div>
+          <div class="brand-name">Sahayak</div>
+          <div class="brand-sub">CONNECT</div>
+        </div>
+      </div>
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="request.html" class="nav-link active">Get Help</a></li>
+        <li><a href="volunteer.html" class="nav-link">Volunteer</a></li>
+        <li><a href="ngo.html" class="nav-link">NGO</a></li>
+        <li><a href="admin.html" class="nav-link">Admin</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="auth.html" class="btn btn-outline">Login</a>
+        <a href="auth.html" class="btn btn-primary">Sign Up</a>
+      </div>
+      <button class="hamburger" onclick="toggleMenu()">☰</button>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="index.html">🏠 Home</a>
+      <a href="request.html">🆘 Get Help</a>
+      <a href="volunteer.html">🦺 Volunteer Dashboard</a>
+      <a href="ngo.html">🏢 NGO Dashboard</a>
+      <a href="admin.html">👑 Admin Dashboard</a>
+      <a href="auth.html">🔐 Login / Sign Up</a>
+    </div>
+  </nav>
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <div class="page-header-icon">🆘</div>
+    <h1 class="page-header-title">Request Emergency Help</h1>
+    <p class="page-header-desc">Fill out the form below. Help is on its way. 🚀</p>
+  </div>
+
+  <!-- MAIN FORM AREA -->
+  <div class="form-page-wrap">
+
+    <!-- STEP PROGRESS INDICATOR -->
+    <div class="step-progress" id="stepProgress">
+      <div class="step-dot active" id="dot1">1</div>
+      <div class="step-line" id="line1"></div>
+      <div class="step-dot" id="dot2">2</div>
+      <div class="step-line" id="line2"></div>
+      <div class="step-dot" id="dot3">3</div>
+    </div>
+
+    <!-- FORM CARD -->
+    <div class="card form-card">
+
+      <!-- ── STEP 1: Type + Urgency ── -->
+      <div class="form-step" id="step1">
+        <h3 class="step-title">1. What do you need help with?</h3>
+
+        <!-- Help Type Selector -->
+        <div class="type-grid">
+          <button class="type-btn active" data-type="food" onclick="selectType(this,'food')">
+            <span class="type-btn-icon">🍱</span>
+            <span class="type-btn-label">Food</span>
+          </button>
+          <button class="type-btn" data-type="medical" onclick="selectType(this,'medical')">
+            <span class="type-btn-icon">🏥</span>
+            <span class="type-btn-label">Medical</span>
+          </button>
+          <button class="type-btn" data-type="shelter" onclick="selectType(this,'shelter')">
+            <span class="type-btn-icon">🏠</span>
+            <span class="type-btn-label">Shelter</span>
+          </button>
+          <button class="type-btn" data-type="blood" onclick="selectType(this,'blood')">
+            <span class="type-btn-icon">🩸</span>
+            <span class="type-btn-label">Blood</span>
+          </button>
+        </div>
+
+        <!-- Urgency Selector -->
+        <div class="form-group">
+          <label class="form-label">Urgency Level *</label>
+          <div class="urgency-grid">
+            <button class="urgency-btn" data-urgency="critical" onclick="selectUrgency(this,'critical')">
+              🔴 Critical
+            </button>
+            <button class="urgency-btn active" data-urgency="high" onclick="selectUrgency(this,'high')">
+              🟡 High
+            </button>
+            <button class="urgency-btn" data-urgency="medium" onclick="selectUrgency(this,'medium')">
+              🔵 Medium
+            </button>
+          </div>
+        </div>
+
+        <button class="btn btn-primary btn-block" onclick="goToStep(2)">
+          Next: Describe Your Need →
+        </button>
+      </div>
+
+      <!-- ── STEP 2: Description ── -->
+      <div class="form-step hidden" id="step2">
+        <h3 class="step-title">2. Describe Your Situation</h3>
+
+        <div class="form-group">
+          <label class="form-label">Request Title *</label>
+          <input type="text" class="form-input" id="reqTitle"
+            placeholder="Briefly describe your need e.g. Family needs food urgently" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Description *</label>
+          <textarea class="form-input form-textarea" id="reqDesc" rows="4"
+            placeholder="Provide more details — number of people, specific requirements, current situation..."></textarea>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-outline" onclick="goToStep(1)">← Back</button>
+          <button class="btn btn-primary" onclick="goToStep(3)">Next: Your Details →</button>
+        </div>
+      </div>
+
+      <!-- ── STEP 3: Contact + Location ── -->
+      <div class="form-step hidden" id="step3">
+        <h3 class="step-title">3. Your Contact Details</h3>
+
+        <div class="form-group">
+          <label class="form-label">Your Name *</label>
+          <input type="text" class="form-input" id="reqName" placeholder="Full name" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Phone Number *</label>
+          <input type="tel" class="form-input" id="reqPhone" placeholder="+91-XXXXXXXXXX" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">City *</label>
+          <input type="text" class="form-input" id="reqCity" placeholder="e.g. New Delhi" />
+        </div>
+
+        <!-- Location Capture Button -->
+        <div class="form-group">
+          <label class="form-label">📍 Location</label>
+          <button class="location-btn" id="locationBtn" onclick="captureLocation()">
+            📍 Click to Auto-Capture My Location
+          </button>
+          <!-- Shows coords after capture -->
+          <div class="location-status hidden" id="locationStatus"></div>
+        </div>
+
+        <!-- Summary Box -->
+        <div class="summary-box" id="summaryBox">
+          <div class="summary-title">📋 Request Summary</div>
+          <div class="summary-content" id="summaryContent"></div>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-outline" onclick="goToStep(2)">← Back</button>
+          <button class="btn btn-danger" onclick="submitRequest()">
+            🆘 Submit Help Request
+          </button>
+        </div>
+      </div>
+
+    </div><!-- /form-card -->
+
+    <!-- SUCCESS MESSAGE (hidden until form submitted) -->
+    <div class="success-card hidden" id="successCard">
+      <div class="success-icon">✅</div>
+      <h2 class="success-title">Help Request Submitted!</h2>
+      <p class="success-desc">
+        We are connecting you with nearby volunteers and NGOs right now.
+        You will receive a call or message shortly. Stay safe! 💚
+      </p>
+      <div class="success-ref" id="successRef"></div>
+      <a href="index.html" class="btn btn-primary btn-lg">← Back to Home</a>
+    </div>
+
+  </div><!-- /form-page-wrap -->
+
+  <script src="script.js"></script>
+  <script>
+    // ── State for form ──
+    let selectedType    = 'food';
+    let selectedUrgency = 'high';
+    let capturedLocation = null;
+
+    // ── Select help type (highlights button) ──
+    function selectType(btn, type) {
+      document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedType = type;
+    }
+
+    // ── Select urgency level ──
+    function selectUrgency(btn, urgency) {
+      document.querySelectorAll('.urgency-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedUrgency = urgency;
+    }
+
+    // ── Navigate between steps with validation ──
+    function goToStep(step) {
+      // Validate step 2 before moving to step 3
+      if (step === 3) {
+        const title = document.getElementById('reqTitle').value.trim();
+        const desc  = document.getElementById('reqDesc').value.trim();
+        if (!title || !desc) {
+          showToast('Please fill in the title and description', 'error');
+          return;
+        }
+        // Update summary box
+        updateSummary();
+      }
+
+      // Hide all steps, show target
+      document.querySelectorAll('.form-step').forEach(s => s.classList.add('hidden'));
+      document.getElementById('step' + step).classList.remove('hidden');
+
+      // Update progress dots
+      for (let i = 1; i <= 3; i++) {
+        const dot  = document.getElementById('dot'  + i);
+        const line = document.getElementById('line' + (i - 1));
+        dot.classList.toggle('active', i <= step);
+        dot.classList.toggle('done',   i <  step);
+        if (line) line.classList.toggle('done', i <= step);
+      }
+    }
+
+    // ── Build and display the summary ──
+    function updateSummary() {
+      const type = HELP_TYPES[selectedType];
+      document.getElementById('summaryContent').innerHTML = `
+        <span>${type.icon} ${type.label}</span> •
+        <span class="urgency-text-${selectedUrgency}">${selectedUrgency} urgency</span>
+        <div style="margin-top:6px;color:#047857;font-weight:600">
+          "${document.getElementById('reqTitle').value}"
+        </div>
+      `;
+    }
+
+    // ── Geolocation capture ──
+    function captureLocation() {
+      const btn = document.getElementById('locationBtn');
+      btn.textContent = '⏳ Getting your location...';
+      btn.disabled = true;
+
+      if (!navigator.geolocation) {
+        showToast('Geolocation not supported by your browser', 'error');
+        btn.textContent = '📍 Location Not Supported';
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(
+        pos => {
+          capturedLocation = {
+            lat: pos.coords.latitude,
+            lng: pos.coords.longitude
+          };
+          btn.textContent = '✅ Location Captured Successfully!';
+          btn.classList.add('location-captured');
+
+          const status = document.getElementById('locationStatus');
+          status.textContent =
+            `Lat: ${capturedLocation.lat.toFixed(4)}, Lng: ${capturedLocation.lng.toFixed(4)}`;
+          status.classList.remove('hidden');
+
+          showToast('Location captured! 📍', 'success');
+        },
+        err => {
+          showToast('Location denied. Please enter city manually.', 'error');
+          btn.textContent = '⚠️ Location Access Denied';
+          btn.disabled = false;
+        }
+      );
+    }
+
+    // ── Submit the help request ──
+    function submitRequest() {
+      const name  = document.getElementById('reqName').value.trim();
+      const phone = document.getElementById('reqPhone').value.trim();
+      const city  = document.getElementById('reqCity').value.trim();
+      const title = document.getElementById('reqTitle').value.trim();
+
+      // Validate required fields
+      if (!name || !phone || !city || !title) {
+        showToast('Please fill in all required fields', 'error');
+        return;
+      }
+
+      // Build new request object matching our data schema
+      const newRequest = {
+        id:          'r' + Date.now(),
+        type:        selectedType,
+        title:       title,
+        description: document.getElementById('reqDesc').value.trim(),
+        name:        name,
+        phone:       phone,
+        city:        city,
+        urgency:     selectedUrgency,
+        status:      'pending',
+        time:        'Just now',
+        location:    capturedLocation || { lat: 28.6139, lng: 77.2090 }
+      };
+
+      // Add to shared REQUESTS array (in-memory; would go to DB in production)
+      REQUESTS.unshift(newRequest);
+
+      // Show success card, hide form card
+      document.querySelector('.form-card').classList.add('hidden');
+      document.getElementById('stepProgress').classList.add('hidden');
+
+      const successCard = document.getElementById('successCard');
+      successCard.classList.remove('hidden');
+      document.getElementById('successRef').textContent =
+        `Reference ID: ${newRequest.id.toUpperCase()}`;
+
+      showToast('Help request submitted! Connecting you with volunteers... 🚀', 'success');
+    }
+
+    // ── Set active nav ──
+    setActiveNav('request.html');
+  </script>
+
+</body>
+</html>
