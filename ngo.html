@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NGO Dashboard — Sahayak Connect</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+      <div class="brand" onclick="window.location='index.html'">
+        <div class="brand-icon">🤝</div>
+        <div>
+          <div class="brand-name">Sahayak</div>
+          <div class="brand-sub">CONNECT</div>
+        </div>
+      </div>
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="request.html" class="nav-link">Get Help</a></li>
+        <li><a href="volunteer.html" class="nav-link">Volunteer</a></li>
+        <li><a href="ngo.html" class="nav-link active">NGO</a></li>
+        <li><a href="admin.html" class="nav-link">Admin</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="auth.html" class="btn btn-outline">Login</a>
+        <a href="auth.html" class="btn btn-primary">Sign Up</a>
+      </div>
+      <button class="hamburger" onclick="toggleMenu()">☰</button>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="index.html">🏠 Home</a>
+      <a href="request.html">🆘 Get Help</a>
+      <a href="volunteer.html">🦺 Volunteer Dashboard</a>
+      <a href="ngo.html">🏢 NGO Dashboard</a>
+      <a href="admin.html">👑 Admin Dashboard</a>
+      <a href="auth.html">🔐 Login / Sign Up</a>
+    </div>
+  </nav>
+
+  <!-- DASHBOARD HEADER -->
+  <div class="dash-header dash-header-blue">
+    <div class="dash-header-inner">
+      <div class="dash-header-icon">🏢</div>
+      <div>
+        <h1 class="dash-header-title">NGO Dashboard</h1>
+        <p class="dash-header-sub">Post services, manage camps, and help communities in need.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="dash-page container">
+
+    <!-- LEFT: Post Service Form -->
+    <div class="dash-main">
+      <div class="card form-card" style="max-width:100%">
+
+        <h3 class="step-title">📢 Post Available Service / Camp</h3>
+
+        <!-- Service Type Selector -->
+        <div class="form-group">
+          <label class="form-label">Service Type</label>
+          <div class="type-grid">
+            <button class="type-btn active" data-type="food"
+              onclick="selectNgoService(this,'food')">
+              <span class="type-btn-icon">🍱</span>
+              <span class="type-btn-label">Food</span>
+            </button>
+            <button class="type-btn" data-type="medical"
+              onclick="selectNgoService(this,'medical')">
+              <span class="type-btn-icon">🏥</span>
+              <span class="type-btn-label">Medical</span>
+            </button>
+            <button class="type-btn" data-type="shelter"
+              onclick="selectNgoService(this,'shelter')">
+              <span class="type-btn-icon">🏠</span>
+              <span class="type-btn-label">Shelter</span>
+            </button>
+            <button class="type-btn" data-type="blood"
+              onclick="selectNgoService(this,'blood')">
+              <span class="type-btn-icon">🩸</span>
+              <span class="type-btn-label">Blood</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Form Fields -->
+        <div class="form-group">
+          <label class="form-label">Service / Camp Title *</label>
+          <input type="text" class="form-input" id="ngoTitle"
+            placeholder="e.g. Free Meals Camp at Lajpat Nagar" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Location / Address *</label>
+          <input type="text" class="form-input" id="ngoLocation"
+            placeholder="Full address where service is available" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">City *</label>
+          <input type="text" class="form-input" id="ngoCity"
+            placeholder="e.g. Mumbai" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Available Spots / Capacity</label>
+          <input type="text" class="form-input" id="ngoSpots"
+            placeholder="e.g. 200 meals available, 50 beds, 10 units O-" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Operating Hours</label>
+          <input type="text" class="form-input" id="ngoHours"
+            placeholder="e.g. 8 AM – 8 PM, 7 days a week" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Description</label>
+          <textarea class="form-input form-textarea" id="ngoDesc" rows="3"
+            placeholder="Details about the service — what's provided, who can avail, requirements...">
+          </textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Contact Email / Phone</label>
+          <input type="text" class="form-input" id="ngoContact"
+            placeholder="contact@yourngo.org or +91-XXXXXXXXXX" />
+        </div>
+
+        <button class="btn btn-primary btn-block" style="background:linear-gradient(135deg,#1d4ed8,#2563eb)"
+          onclick="postNgoService()">
+          📢 Post Service
+        </button>
+
+      </div><!-- /form-card -->
+    </div>
+
+    <!-- RIGHT: NGO Directory -->
+    <div class="dash-sidebar">
+
+      <!-- Quick summary stats -->
+      <div class="card sidebar-card">
+        <h3 class="sidebar-card-title">📊 Platform Stats</h3>
+        <div id="ngoStats"></div>
+      </div>
+
+      <!-- List of all registered NGOs -->
+      <div class="card sidebar-card">
+        <h3 class="sidebar-card-title">🏢 Registered NGOs</h3>
+        <div id="ngoDirectory"></div>
+      </div>
+
+      <!-- Recently posted services (updated when form submitted) -->
+      <div class="card sidebar-card">
+        <h3 class="sidebar-card-title">📋 Recent Service Posts</h3>
+        <div id="recentPosts">
+          <p class="empty-text">No posts yet. Use the form to post a service.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+
+    let selectedNgoServiceType = 'food';
+
+    // ── On load ──
+    window.addEventListener('DOMContentLoaded', () => {
+      renderNgoStats();
+      renderNgoDirectory();
+      setActiveNav('ngo.html');
+    });
+
+    // ── Select service type ──
+    function selectNgoService(btn, type) {
+      document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedNgoServiceType = type;
+    }
+
+    // ── Post a new NGO service ──
+    function postNgoService() {
+      const title    = document.getElementById('ngoTitle').value.trim();
+      const location = document.getElementById('ngoLocation').value.trim();
+      const city     = document.getElementById('ngoCity').value.trim();
+
+      if (!title || !location || !city) {
+        showToast('Please fill in Title, Location, and City.', 'error');
+        return;
+      }
+
+      const post = {
+        id:      'post_' + Date.now(),
+        type:    selectedNgoServiceType,
+        title,
+        location,
+        city,
+        spots:   document.getElementById('ngoSpots').value.trim(),
+        hours:   document.getElementById('ngoHours').value.trim(),
+        desc:    document.getElementById('ngoDesc').value.trim(),
+        contact: document.getElementById('ngoContact').value.trim(),
+        time:    'Just now'
+      };
+
+      // Prepend to recent posts panel
+      const container = document.getElementById('recentPosts');
+      const isEmpty   = container.querySelector('.empty-text');
+      if (isEmpty) isEmpty.remove();
+
+      const typeInfo = HELP_TYPES[post.type];
+      container.insertAdjacentHTML('afterbegin', `
+        <div class="ngo-post-item">
+          <div class="ngo-post-header">
+            <span class="ngo-post-icon">${typeInfo.icon}</span>
+            <div>
+              <div class="ngo-post-title">${post.title}</div>
+              <div class="ngo-post-meta">📍 ${post.city} • ⏱ ${post.time}</div>
+            </div>
+          </div>
+          ${post.spots ? `<div class="ngo-post-spots">🔢 ${post.spots}</div>` : ''}
+        </div>
+      `);
+
+      showToast('Service posted! Volunteers have been notified. 🎉', 'success');
+
+      // Reset form fields
+      ['ngoTitle','ngoLocation','ngoCity','ngoSpots','ngoHours','ngoDesc','ngoContact']
+        .forEach(id => document.getElementById(id).value = '');
+    }
+
+    // ── Stats in sidebar ──
+    function renderNgoStats() {
+      document.getElementById('ngoStats').innerHTML = `
+        <div class="stat-bar-row">
+          <span class="stat-bar-label">Total NGOs</span>
+          <span class="stat-bar-num" style="color:#3B82F6">${NGOS.length}</span>
+        </div>
+        <div class="stat-bar-row">
+          <span class="stat-bar-label">Active Camps</span>
+          <span class="stat-bar-num" style="color:#059669">
+            ${NGOS.filter(n => n.campActive).reduce((a,n) => a + n.campsRunning, 0)}
+          </span>
+        </div>
+        <div class="stat-bar-row">
+          <span class="stat-bar-label">Open Requests</span>
+          <span class="stat-bar-num" style="color:#F59E0B">
+            ${REQUESTS.filter(r => r.status === 'pending').length}
+          </span>
+        </div>
+      `;
+    }
+
+    // ── Render NGO cards in directory ──
+    function renderNgoDirectory() {
+      document.getElementById('ngoDirectory').innerHTML =
+        NGOS.map(n => `
+          <div class="ngo-dir-card ${n.campActive ? 'ngo-active' : 'ngo-inactive'}">
+            <div class="ngo-dir-header">
+              <div class="avatar ${n.campActive ? 'avatar-green' : 'avatar-grey'}">${n.avatar}</div>
+              <div style="flex:1">
+                <div class="ngo-dir-name">${n.name}</div>
+                <div class="ngo-dir-city">📍 ${n.city}</div>
+              </div>
+              <div class="ngo-status-badge ${n.campActive ? 'badge-active' : 'badge-inactive'}">
+                ${n.campActive ? `✅ ${n.campsRunning} Camps` : '⏸ Inactive'}
+              </div>
+            </div>
+            <p class="ngo-dir-desc">${n.description}</p>
+            <div class="ngo-mini-tags">
+              ${n.services.map(s =>
+                `<span class="tag tag-${s}">${HELP_TYPES[s].icon} ${HELP_TYPES[s].label}</span>`
+              ).join('')}
+            </div>
+          </div>
+        `).join('');
+    }
+  </script>
+
+</body>
+</html>
