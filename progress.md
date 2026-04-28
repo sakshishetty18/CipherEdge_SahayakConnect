@@ -48,3 +48,12 @@ Next Steps
 -Add filtering (location / urgency / category)
 -Improve UI responsiveness
 
+Checkpoint 4 - 11:00 PM
+✅ Completed
+NGO page (ngo.html) added and integrated into project navigation
+Basic layout for NGO listing created
+Project structure updated for multi-role system (User / Volunteer / NGO / Admin planning started)
+🔄 In Progress
+Authentication system (login/signup) not yet implemented
+Admin dashboard design pending
+Volunteer–NGO interaction flow still under development
