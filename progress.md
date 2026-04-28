@@ -5,22 +5,22 @@
 - Team roles assigned
 - Idea finalized: Social help platform
 
-## Current Progress
-- Generated all project files
-- Tested locally on laptop
-- Website running successfully
+## Checkpoint 1 - 3:00 PM
 
-## Features Implemented
-- Home page
-- Help request form
-- Volunteer dashboard
-- NGO dashboard
-- Admin dashboard
-- Authentication page
-- Styling and UI
+### Completed
+- Basic project structure created
+- Home page (index.html) implemented
+- Styling added (style.css)
+- Navigation setup between pages
+- Project tested locally
 
-## Next Steps
-- Upload files to GitHub
-- Improve UI
-- Test request flow
-- Final demo preparation
+### In Progress
+- Help request form development
+- JavaScript logic implementation
+- Volunteer dashboard design
+
+### Next Steps
+- Implement request form
+- Add localStorage logic
+- Create volunteer dashboard
+- Improve UI and responsiveness
