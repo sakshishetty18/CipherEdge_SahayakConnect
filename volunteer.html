@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Volunteer Dashboard — Sahayak Connect</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+      <div class="brand" onclick="window.location='index.html'">
+        <div class="brand-icon">🤝</div>
+        <div>
+          <div class="brand-name">Sahayak</div>
+          <div class="brand-sub">CONNECT</div>
+        </div>
+      </div>
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="request.html" class="nav-link">Get Help</a></li>
+        <li><a href="volunteer.html" class="nav-link active">Volunteer</a></li>
+        <li><a href="ngo.html" class="nav-link">NGO</a></li>
+        <li><a href="admin.html" class="nav-link">Admin</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="auth.html" class="btn btn-outline">Login</a>
+        <a href="auth.html" class="btn btn-primary">Sign Up</a>
+      </div>
+      <button class="hamburger" onclick="toggleMenu()">☰</button>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="index.html">🏠 Home</a>
+      <a href="request.html">🆘 Get Help</a>
+      <a href="volunteer.html">🦺 Volunteer Dashboard</a>
+      <a href="ngo.html">🏢 NGO Dashboard</a>
+      <a href="admin.html">👑 Admin Dashboard</a>
+      <a href="auth.html">🔐 Login / Sign Up</a>
+    </div>
+  </nav>
+
+  <!-- DASHBOARD HEADER BANNER -->
+  <div class="dash-header dash-header-green">
+    <div class="dash-header-inner">
+      <div class="dash-header-icon">🦺</div>
+      <div>
+        <h1 class="dash-header-title">Volunteer Dashboard</h1>
+        <p class="dash-header-sub">
+          Welcome! Review nearby requests and make a difference today.
+        </p>
+      </div>
+      <!-- Live KPI counters shown in banner -->
+      <div class="dash-kpis" id="volKpis"></div>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="dash-page container">
+
+    <!-- LEFT COLUMN: Requests List -->
+    <div class="dash-main">
+
+      <!-- Type Filter Pills -->
+      <div class="filter-bar" id="typeFilters">
+        <button class="filter-pill active" data-filter="all"
+          onclick="filterRequests('all', this)">🌐 All</button>
+        <button class="filter-pill" data-filter="food"
+          onclick="filterRequests('food', this)">🍱 Food</button>
+        <button class="filter-pill" data-filter="medical"
+          onclick="filterRequests('medical', this)">🏥 Medical</button>
+        <button class="filter-pill" data-filter="shelter"
+          onclick="filterRequests('shelter', this)">🏠 Shelter</button>
+        <button class="filter-pill" data-filter="blood"
+          onclick="filterRequests('blood', this)">🩸 Blood</button>
+      </div>
+
+      <!-- Status Filter Pills -->
+      <div class="filter-bar" id="statusFilters" style="margin-top:8px">
+        <button class="filter-pill-sm active" data-status="pending"
+          onclick="filterStatus('pending', this)">Pending</button>
+        <button class="filter-pill-sm" data-status="accepted"
+          onclick="filterStatus('accepted', this)">In Progress</button>
+        <button class="filter-pill-sm" data-status="resolved"
+          onclick="filterStatus('resolved', this)">Resolved</button>
+        <button class="filter-pill-sm" data-status="all"
+          onclick="filterStatus('all', this)">All</button>
+      </div>
+
+      <!-- Results count -->
+      <div class="results-label" id="resultsLabel"></div>
+
+      <!-- Request cards injected by JS -->
+      <div class="requests-grid" id="volunteerRequestsGrid"></div>
+
+    </div><!-- /dash-main -->
+
+    <!-- RIGHT SIDEBAR -->
+    <div class="dash-sidebar">
+
+      <!-- Stats Card -->
+      <div class="card sidebar-card">
+        <h3 class="sidebar-card-title">📊 Live Stats</h3>
+        <div id="sidebarStats"></div>
+      </div>
+
+      <!-- Active Volunteers -->
+      <div class="card sidebar-card">
+        <h3 class="sidebar-card-title">🦺 Active Volunteers</h3>
+        <div id="activeVolunteersList"></div>
+      </div>
+
+      <!-- NGO Services -->
+      <div class="card sidebar-card">
+        <h3 class="sidebar-card-title">🏢 NGO Services Nearby</h3>
+        <div id="ngoServicesList"></div>
+      </div>
+
+    </div><!-- /dash-sidebar -->
+
+  </div><!-- /dash-page -->
+
+  <script src="script.js"></script>
+  <script>
+
+    // ── Current filter state ──
+    let currentTypeFilter   = 'all';
+    let currentStatusFilter = 'pending';
+
+    // ── Render everything on load ──
+    window.addEventListener('DOMContentLoaded', () => {
+      renderVolunteerPage();
+      setActiveNav('volunteer.html');
+    });
+
+    function renderVolunteerPage() {
+      renderKpis();
+      renderRequestsGrid();
+      renderSidebarStats();
+      renderActiveVolunteers();
+      renderNgoServices();
+    }
+
+    // ── Dashboard KPIs in header ──
+    function renderKpis() {
+      const pending    = REQUESTS.filter(r => r.status === 'pending').length;
+      const inProgress = REQUESTS.filter(r => r.status === 'accepted').length;
+      document.getElementById('volKpis').innerHTML = `
+        <div class="dash-kpi">
+          <div class="dash-kpi-num">🆘 ${pending}</div>
+          <div class="dash-kpi-label">Pending</div>
+        </div>
+        <div class="dash-kpi">
+          <div class="dash-kpi-num">⚡ ${inProgress}</div>
+          <div class="dash-kpi-label">In Progress</div>
+        </div>
+      `;
+    }
+
+    // ── Filter by type ──
+    function filterRequests(type, btn) {
+      currentTypeFilter = type;
+      document.querySelectorAll('#typeFilters .filter-pill')
+        .forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderRequestsGrid();
+    }
+
+    // ── Filter by status ──
+    function filterStatus(status, btn) {
+      currentStatusFilter = status;
+      document.querySelectorAll('#statusFilters .filter-pill-sm')
+        .forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderRequestsGrid();
+    }
+
+    // ── Main requests grid renderer ──
+    function renderRequestsGrid() {
+      const filtered = REQUESTS.filter(r => {
+        const typeOk   = currentTypeFilter === 'all'   || r.type   === currentTypeFilter;
+        const statusOk = currentStatusFilter === 'all' || r.status === currentStatusFilter;
+        return typeOk && statusOk;
+      });
+
+      document.getElementById('resultsLabel').textContent =
+        `Showing ${filtered.length} request${filtered.length !== 1 ? 's' : ''}`;
+
+      const grid = document.getElementById('volunteerRequestsGrid');
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">🔍</div>
+            <p>No requests found for this filter.</p>
+          </div>`;
+        return;
+      }
+
+      // Build each card with volunteer-specific action buttons
+      grid.innerHTML = filtered.map(r => {
+        let actionBtn = '';
+        if (r.status === 'pending') {
+          actionBtn = `<button class="btn btn-primary btn-block"
+            onclick="acceptRequest('${r.id}')">✋ Accept This Request</button>`;
+        } else if (r.status === 'accepted') {
+          actionBtn = `<button class="btn btn-success btn-block"
+            onclick="resolveRequest('${r.id}')">✅ Mark as Resolved</button>`;
+        }
+        return buildRequestCard(r, true, actionBtn);
+      }).join('');
+    }
+
+    // ── Accept a pending request ──
+    function acceptRequest(id) {
+      const req = REQUESTS.find(r => r.id === id);
+      if (!req) return;
+      req.status = 'accepted';
+      renderVolunteerPage();
+      showToast('Request accepted! The person has been notified. 🤝', 'success');
+    }
+
+    // ── Resolve an in-progress request ──
+    function resolveRequest(id) {
+      const req = REQUESTS.find(r => r.id === id);
+      if (!req) return;
+      req.status = 'resolved';
+      renderVolunteerPage();
+      showToast("Marked as resolved. You're a lifesaver! ❤️", 'success');
+    }
+
+    // ── Sidebar: live stats bars ──
+    function renderSidebarStats() {
+      const configs = [
+        { label: 'Pending',     status: 'pending',  color: '#F59E0B' },
+        { label: 'In Progress', status: 'accepted',  color: '#3B82F6' },
+        { label: 'Resolved',    status: 'resolved',  color: '#10B981' },
+      ];
+      document.getElementById('sidebarStats').innerHTML = configs.map(c => {
+        const count = REQUESTS.filter(r => r.status === c.status).length;
+        return `
+          <div class="stat-bar-row">
+            <span class="stat-bar-label">${c.label}</span>
+            <span class="stat-bar-num" style="color:${c.color}">${count}</span>
+          </div>`;
+      }).join('');
+    }
+
+    // ── Sidebar: active volunteer avatars ──
+    function renderActiveVolunteers() {
+      const active = VOLUNTEERS.filter(v => v.active);
+      document.getElementById('activeVolunteersList').innerHTML =
+        active.map(v => `
+          <div class="sidebar-person">
+            <div class="avatar avatar-green">${v.avatar}</div>
+            <div>
+              <div class="sidebar-person-name">${v.name}</div>
+              <div class="sidebar-person-meta">📍 ${v.city} • ⭐ ${v.rating}</div>
+            </div>
+            <div class="online-dot"></div>
+          </div>
+        `).join('');
+    }
+
+    // ── Sidebar: NGO service cards ──
+    function renderNgoServices() {
+      const active = NGOS.filter(n => n.campActive);
+      document.getElementById('ngoServicesList').innerHTML =
+        active.map(n => `
+          <div class="ngo-mini-card">
+            <div class="ngo-mini-name">${n.name}</div>
+            <div class="ngo-mini-meta">📍 ${n.city} • ${n.campsRunning} camps active</div>
+            <div class="ngo-mini-tags">
+              ${n.services.map(s =>
+                `<span class="tag tag-${s}">${HELP_TYPES[s].icon} ${HELP_TYPES[s].label}</span>`
+              ).join('')}
+            </div>
+          </div>
+        `).join('');
+    }
+  </script>
+
+</body>
+</html>
