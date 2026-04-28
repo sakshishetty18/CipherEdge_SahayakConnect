@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sahayak Connect — Emergency Help Platform</title>
+
+  <!-- Google Fonts: Nunito (body) + Playfair Display (headings) -->
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet" />
+
+  <!-- Main stylesheet -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════════
+       NAVBAR — sticky top navigation bar
+  ═══════════════════════════════════════════════ -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+
+      <!-- Brand Logo -->
+      <div class="brand" onclick="window.location='index.html'">
+        <div class="brand-icon">🤝</div>
+        <div>
+          <div class="brand-name">Sahayak</div>
+          <div class="brand-sub">CONNECT</div>
+        </div>
+      </div>
+
+      <!-- Desktop Navigation Links -->
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" class="nav-link active">Home</a></li>
+        <li><a href="request.html" class="nav-link">Get Help</a></li>
+        <li><a href="volunteer.html" class="nav-link">Volunteer</a></li>
+        <li><a href="ngo.html" class="nav-link">NGO</a></li>
+        <li><a href="admin.html" class="nav-link">Admin</a></li>
+      </ul>
+
+      <!-- Auth Buttons -->
+      <div class="nav-actions">
+        <a href="auth.html" class="btn btn-outline">Login</a>
+        <a href="auth.html" class="btn btn-primary">Sign Up</a>
+      </div>
+
+      <!-- Hamburger for Mobile -->
+      <button class="hamburger" id="hamburger" onclick="toggleMenu()">☰</button>
+    </div>
+
+    <!-- Mobile Menu Dropdown -->
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="index.html">🏠 Home</a>
+      <a href="request.html">🆘 Get Help</a>
+      <a href="volunteer.html">🦺 Volunteer Dashboard</a>
+      <a href="ngo.html">🏢 NGO Dashboard</a>
+      <a href="admin.html">👑 Admin Dashboard</a>
+      <a href="auth.html">🔐 Login / Sign Up</a>
+    </div>
+  </nav>
+
+  <!-- ═══════════════════════════════════════════════
+       HERO SECTION — main landing banner
+  ═══════════════════════════════════════════════ -->
+  <section class="hero">
+
+    <!-- Decorative floating background blobs -->
+    <div class="hero-blob blob-1"></div>
+    <div class="hero-blob blob-2"></div>
+    <div class="hero-blob blob-3"></div>
+
+    <div class="hero-inner">
+
+      <!-- Left: Headline + CTAs -->
+      <div class="hero-content fade-up">
+
+        <!-- Live indicator badge -->
+        <div class="live-badge">
+          <span class="live-dot"></span>
+          <span id="liveBadgeText">LIVE • Loading requests...</span>
+        </div>
+
+        <h1 class="hero-title">
+          Connecting<br />
+          <span class="gradient-text">Hearts</span> &<br />
+          <span class="hero-sub-text">Helping Hands</span>
+        </h1>
+
+        <p class="hero-desc">
+          An emergency assistance platform that connects people in crisis
+          with volunteers and NGOs nearby — in real time.
+        </p>
+
+        <!-- Primary CTA Buttons -->
+        <div class="hero-btns">
+          <a href="request.html" class="btn btn-danger btn-lg pulse-btn">
+            🆘 I Need Help
+          </a>
+          <a href="auth.html" class="btn btn-glass btn-lg">
+            🤝 I Want to Help
+          </a>
+        </div>
+
+        <!-- Help Category Tags -->
+        <div class="hero-tags">
+          <span class="hero-tag">🍱 Food</span>
+          <span class="hero-tag">🏥 Medical</span>
+          <span class="hero-tag">🏠 Shelter</span>
+          <span class="hero-tag">🩸 Blood</span>
+        </div>
+      </div>
+
+      <!-- Right: Live Requests Panel -->
+      <div class="hero-panel fade-up-2">
+        <div class="panel-header">
+          <h3 class="panel-title">🔴 Live Requests</h3>
+          <a href="volunteer.html" class="panel-link">View All →</a>
+        </div>
+
+        <!-- Requests injected here by script.js -->
+        <div id="liveRequestsFeed">
+          <p class="panel-empty">Loading live requests...</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       STATS SECTION — animated impact counters
+  ═══════════════════════════════════════════════ -->
+  <section class="stats-section">
+    <div class="container">
+      <div class="stats-grid">
+
+        <div class="stat-card">
+          <div class="stat-icon">❤️</div>
+          <!-- data-target = final number for animation -->
+          <div class="stat-num" data-target="12847">0</div>
+          <div class="stat-label">Lives Helped</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">🦺</div>
+          <div class="stat-num" data-target="3241">0</div>
+          <div class="stat-label">Active Volunteers</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">🏢</div>
+          <div class="stat-num" data-target="187">0</div>
+          <div class="stat-label">NGOs Connected</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">📋</div>
+          <div class="stat-num" data-target="94">0</div>
+          <div class="stat-label">Requests Today</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">✅</div>
+          <div class="stat-num" data-target="94" data-suffix="%">0</div>
+          <div class="stat-label">Success Rate</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       HOW IT WORKS — 3 step explainer
+  ═══════════════════════════════════════════════ -->
+  <section class="how-section">
+    <div class="container">
+
+      <div class="section-header">
+        <div class="section-badge">How It Works</div>
+        <h2 class="section-title">Emergency Help in 3 Simple Steps</h2>
+      </div>
+
+      <div class="steps-grid">
+
+        <div class="step-card card">
+          <div class="step-num">01</div>
+          <div class="step-icon">📍</div>
+          <h3>Share Your Location</h3>
+          <p>Enable location access so we can match you with the nearest volunteers and NGOs in your area automatically.</p>
+        </div>
+
+        <div class="step-card card">
+          <div class="step-num">02</div>
+          <div class="step-icon">🆘</div>
+          <h3>Submit Help Request</h3>
+          <p>Choose the type of help you need — food, medical, shelter, or blood — and describe your situation briefly.</p>
+        </div>
+
+        <div class="step-card card">
+          <div class="step-num">03</div>
+          <div class="step-icon">🤝</div>
+          <h3>Get Connected Instantly</h3>
+          <p>Our system notifies nearby volunteers and NGOs immediately. Get confirmed help within minutes.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       RECENT REQUESTS — pulled from dummy data
+  ═══════════════════════════════════════════════ -->
+  <section class="requests-section">
+    <div class="container">
+
+      <div class="section-flex-header">
+        <h2 class="section-title">Recent Help Requests</h2>
+        <a href="volunteer.html" class="btn btn-outline">View All →</a>
+      </div>
+
+      <!-- Cards injected by script.js -->
+      <div class="requests-grid" id="homeRequestsGrid"></div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       CTA BANNER — call to action at page bottom
+  ═══════════════════════════════════════════════ -->
+  <section class="cta-section">
+    <div class="container cta-inner">
+      <div class="cta-emoji">🌍</div>
+      <h2 class="cta-title">Join the Movement</h2>
+      <p class="cta-desc">
+        Every volunteer matters. Every act of kindness creates ripples.
+        Be the reason someone smiles today.
+      </p>
+      <div class="cta-btns">
+        <a href="auth.html" class="btn btn-primary btn-lg">🦺 Become a Volunteer</a>
+        <a href="auth.html" class="btn btn-glass-dark btn-lg">🏢 Register Your NGO</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       FOOTER
+  ═══════════════════════════════════════════════ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+
+        <!-- Brand Column -->
+        <div class="footer-brand">
+          <div class="brand">
+            <div class="brand-icon">🤝</div>
+            <span class="brand-name" style="color:white">Sahayak Connect</span>
+          </div>
+          <p class="footer-desc">Connecting people in crisis with volunteers and NGOs. Making emergency help accessible to all.</p>
+        </div>
+
+        <!-- Platform Links -->
+        <div class="footer-col">
+          <div class="footer-col-title">Platform</div>
+          <a href="index.html" class="footer-link">Home</a>
+          <a href="request.html" class="footer-link">Get Help</a>
+          <a href="volunteer.html" class="footer-link">Find Volunteers</a>
+        </div>
+
+        <!-- Dashboard Links -->
+        <div class="footer-col">
+          <div class="footer-col-title">Dashboards</div>
+          <a href="volunteer.html" class="footer-link">Volunteer</a>
+          <a href="ngo.html" class="footer-link">NGO</a>
+          <a href="admin.html" class="footer-link">Admin</a>
+        </div>
+
+        <!-- Emergency Numbers -->
+        <div class="footer-col">
+          <div class="footer-col-title">Emergency</div>
+          <div class="footer-emergency">🆘 NDMA: 1078</div>
+          <div class="footer-emergency">🚑 Ambulance: 108</div>
+          <div class="footer-emergency">🔥 Fire: 101</div>
+          <div class="footer-emergency">👮 Police: 100</div>
+        </div>
+
+      </div>
+
+      <!-- Footer Bottom Bar -->
+      <div class="footer-bottom">
+        <span>© 2025 Sahayak Connect. Built for social impact. 💚</span>
+        <span>Made with ❤️ for Hackathon 2025</span>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- Main JS (shared data + utilities) -->
+  <script src="script.js"></script>
+
+  <script>
+    // ── On page load: render home page dynamic content ──
+
+    // 1. Show pending count in live badge
+    const pending = REQUESTS.filter(r => r.status === 'pending');
+    document.getElementById('liveBadgeText').textContent =
+      `LIVE • ${pending.length} Active Requests`;
+
+    // 2. Render live requests in hero panel (show top 4 pending)
+    const feed = document.getElementById('liveRequestsFeed');
+    feed.innerHTML = pending.slice(0, 4).map(r => `
+      <div class="live-req-item">
+        <div class="live-req-top">
+          <span class="live-req-icon">${HELP_TYPES[r.type].icon}</span>
+          <span class="live-req-title">${r.title}</span>
+          <span class="urgency-badge urgency-${r.urgency}">${r.urgency}</span>
+        </div>
+        <div class="live-req-meta">
+          <span>📍 ${r.city}</span>
+          <span>⏱ ${r.time}</span>
+        </div>
+      </div>
+    `).join('') || '<p class="panel-empty">No pending requests 🎉</p>';
+
+    // 3. Render recent requests grid (show 6)
+    document.getElementById('homeRequestsGrid').innerHTML =
+      REQUESTS.slice(0, 6).map(r => buildRequestCard(r, false)).join('');
+
+    // 4. Animate stat counters when they scroll into view
+    animateCounters();
+
+    // 5. Highlight active nav link
+    setActiveNav('index.html');
+  </script>
+
+</body>
+</html>
