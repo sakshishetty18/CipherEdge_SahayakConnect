@@ -57,3 +57,17 @@ Completed
 -Authentication system (login/signup) not yet implemented
 -Admin dashboard design pending
 -Volunteer–NGO interaction flow still under development
+
+Checkpoint 5 - 6:00 AM
+Completed
+-Implemented authentication page (auth.html) with role selection (User / Volunteer / NGO / Admin)
+-Connected login flow to respective dashboards
+-Updated volunteer dashboard to display help requests
+-Linked help request form with volunteer dashboard (frontend flow)
+-Improved UI consistency across all pages
+
+ In Progress
+-Map integration for request location display
+-Request status update handling
+-Matching volunteers to requests using distance calculation
+-Admin dashboard data display
