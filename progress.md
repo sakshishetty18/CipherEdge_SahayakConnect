@@ -59,6 +59,7 @@ Completed
 -Volunteer–NGO interaction flow still under development
 
 Checkpoint 5 - 6:00 AM
+
 Completed
 -Implemented authentication page (auth.html) with role selection (User / Volunteer / NGO / Admin)
 -Connected login flow to respective dashboards
