@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard — Sahayak Connect</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+      <div class="brand" onclick="window.location='index.html'">
+        <div class="brand-icon">🤝</div>
+        <div>
+          <div class="brand-name">Sahayak</div>
+          <div class="brand-sub">CONNECT</div>
+        </div>
+      </div>
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="request.html" class="nav-link">Get Help</a></li>
+        <li><a href="volunteer.html" class="nav-link">Volunteer</a></li>
+        <li><a href="ngo.html" class="nav-link">NGO</a></li>
+        <li><a href="admin.html" class="nav-link active">Admin</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="auth.html" class="btn btn-outline">Login</a>
+        <a href="auth.html" class="btn btn-primary">Sign Up</a>
+      </div>
+      <button class="hamburger" onclick="toggleMenu()">☰</button>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="index.html">🏠 Home</a>
+      <a href="request.html">🆘 Get Help</a>
+      <a href="volunteer.html">🦺 Volunteer Dashboard</a>
+      <a href="ngo.html">🏢 NGO Dashboard</a>
+      <a href="admin.html">👑 Admin Dashboard</a>
+      <a href="auth.html">🔐 Login / Sign Up</a>
+    </div>
+  </nav>
+
+  <!-- DASHBOARD HEADER -->
+  <div class="dash-header dash-header-purple">
+    <div class="dash-header-inner">
+      <div class="dash-header-icon">👑</div>
+      <div>
+        <h1 class="dash-header-title">Admin Dashboard</h1>
+        <p class="dash-header-sub">Platform overview, impact metrics, and full data management.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="container" style="padding: 32px 24px">
+
+    <!-- ── KPI CARDS ROW ── -->
+    <div class="kpi-grid" id="adminKpis"></div>
+
+    <!-- ── TAB NAVIGATION ── -->
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="switchTab('overview', this)">📊 Overview</button>
+      <button class="tab-btn" onclick="switchTab('requests', this)">📋 All Requests</button>
+      <button class="tab-btn" onclick="switchTab('volunteers', this)">🦺 Volunteers</button>
+      <button class="tab-btn" onclick="switchTab('ngos', this)">🏢 NGOs</button>
+    </div>
+
+    <!-- ── TAB: OVERVIEW ── -->
+    <div class="tab-panel" id="tab-overview">
+      <div class="overview-grid">
+
+        <!-- Requests by Type: horizontal bar chart -->
+        <div class="card chart-card">
+          <h3 class="chart-title">Requests by Type</h3>
+          <div id="typeBreakdown"></div>
+        </div>
+
+        <!-- Requests by City -->
+        <div class="card chart-card">
+          <h3 class="chart-title">Requests by City</h3>
+          <div id="cityBreakdown"></div>
+        </div>
+
+        <!-- Status distribution -->
+        <div class="card chart-card chart-wide">
+          <h3 class="chart-title">Request Status Overview</h3>
+          <div class="status-overview-grid" id="statusOverview"></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── TAB: ALL REQUESTS ── -->
+    <div class="tab-panel hidden" id="tab-requests">
+      <div class="requests-grid" id="adminRequestsGrid"></div>
+    </div>
+
+    <!-- ── TAB: VOLUNTEERS ── -->
+    <div class="tab-panel hidden" id="tab-volunteers">
+      <div class="vol-grid" id="adminVolunteersGrid"></div>
+    </div>
+
+    <!-- ── TAB: NGOS ── -->
+    <div class="tab-panel hidden" id="tab-ngos">
+      <div class="ngo-grid" id="adminNgosGrid"></div>
+    </div>
+
+  </div><!-- /container -->
+
+  <script src="script.js"></script>
+  <script>
+
+    // ── Render on load ──
+    window.addEventListener('DOMContentLoaded', () => {
+      renderAdminKpis();
+      renderOverviewTab();
+      renderRequestsTab();
+      renderVolunteersTab();
+      renderNgosTab();
+      setActiveNav('admin.html');
+    });
+
+    // ── Switch between tabs ──
+    function switchTab(tabName, btn) {
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('tab-' + tabName).classList.remove('hidden');
+      btn.classList.add('active');
+    }
+
+    // ── Top KPI metric cards ──
+    function renderAdminKpis() {
+      const kpis = [
+        { icon:'❤️', label:'Lives Helped',   value: '12,847',                                  color:'#EF4444', bg:'#FEF2F2' },
+        { icon:'🦺', label:'Volunteers',     value: VOLUNTEERS.length,                          color:'#059669', bg:'#ECFDF5' },
+        { icon:'🏢', label:'NGOs',           value: NGOS.length,                                color:'#3B82F6', bg:'#EFF6FF' },
+        { icon:'📋', label:'Total Requests', value: REQUESTS.length,                            color:'#F59E0B', bg:'#FFFBEB' },
+        { icon:'✅', label:'Resolved',       value: REQUESTS.filter(r=>r.status==='resolved').length, color:'#8B5CF6', bg:'#F5F3FF' },
+      ];
+
+      document.getElementById('adminKpis').innerHTML = kpis.map(k => `
+        <div class="kpi-card" style="background:${k.bg};border-color:${k.color}22">
+          <div class="kpi-icon">${k.icon}</div>
+          <div class="kpi-num" style="color:${k.color}">${k.value}</div>
+          <div class="kpi-label">${k.label}</div>
+        </div>
+      `).join('');
+    }
+
+    // ── Overview: bar charts using CSS widths ──
+    function renderOverviewTab() {
+      // By type
+      const typeCounts = Object.keys(HELP_TYPES).map(t => ({
+        type: t,
+        count: REQUESTS.filter(r => r.type === t).length
+      }));
+      const maxType = Math.max(...typeCounts.map(t => t.count)) || 1;
+
+      document.getElementById('typeBreakdown').innerHTML =
+        typeCounts.map(({ type, count }) => {
+          const info = HELP_TYPES[type];
+          const pct  = Math.round((count / maxType) * 100);
+          return `
+            <div class="bar-row">
+              <div class="bar-label">${info.icon} ${info.label}</div>
+              <div class="bar-track">
+                <div class="bar-fill" style="width:${pct}%;background:${info.color}"></div>
+              </div>
+              <div class="bar-count" style="color:${info.color}">${count}</div>
+            </div>`;
+        }).join('');
+
+      // By city
+      const cities = [...new Set(REQUESTS.map(r => r.city))];
+      document.getElementById('cityBreakdown').innerHTML =
+        cities.map(city => {
+          const count = REQUESTS.filter(r => r.city === city).length;
+          return `
+            <div class="city-row">
+              <span class="city-name">📍 ${city}</span>
+              <span class="city-count">${count}</span>
+            </div>`;
+        }).join('');
+
+      // By status
+      const statuses = [
+        { status:'pending',  label:'Pending',     color:'#F59E0B', bg:'#FFFBEB' },
+        { status:'accepted', label:'In Progress',  color:'#3B82F6', bg:'#EFF6FF' },
+        { status:'resolved', label:'Resolved',     color:'#10B981', bg:'#ECFDF5' },
+      ];
+      document.getElementById('statusOverview').innerHTML =
+        statuses.map(s => {
+          const count = REQUESTS.filter(r => r.status === s.status).length;
+          const pct   = Math.round((count / REQUESTS.length) * 100) || 0;
+          return `
+            <div class="status-ov-card" style="background:${s.bg}">
+              <div class="status-ov-num" style="color:${s.color}">${count}</div>
+              <div class="status-ov-label">${s.label}</div>
+              <div class="status-ov-pct">${pct}% of total</div>
+            </div>`;
+        }).join('');
+    }
+
+    // ── All Requests tab ──
+    function renderRequestsTab() {
+      document.getElementById('adminRequestsGrid').innerHTML =
+        REQUESTS.map(r => buildRequestCard(r, true)).join('');
+    }
+
+    // ── Volunteers tab ──
+    function renderVolunteersTab() {
+      document.getElementById('adminVolunteersGrid').innerHTML =
+        VOLUNTEERS.map(v => `
+          <div class="card vol-card">
+            <div class="vol-card-header">
+              <div class="avatar ${v.active ? 'avatar-green' : 'avatar-grey'}">${v.avatar}</div>
+              <div style="flex:1">
+                <div class="vol-card-name">${v.name}</div>
+                <div class="vol-card-city">📍 ${v.city}</div>
+              </div>
+              <div class="online-dot ${v.active ? '' : 'offline-dot'}"></div>
+            </div>
+            <div class="vol-stats-row">
+              <div class="vol-stat-box" style="background:#f0fdf4">
+                <div class="vol-stat-num" style="color:#059669">${v.helpedCount}</div>
+                <div class="vol-stat-lbl">Helped</div>
+              </div>
+              <div class="vol-stat-box" style="background:#eff6ff">
+                <div class="vol-stat-num" style="color:#3b82f6">${v.rating}</div>
+                <div class="vol-stat-lbl">Rating</div>
+              </div>
+            </div>
+            <div class="ngo-mini-tags">
+              ${v.skills.map(s =>
+                `<span class="tag tag-${s}">${HELP_TYPES[s].icon} ${HELP_TYPES[s].label}</span>`
+              ).join('')}
+            </div>
+          </div>
+        `).join('');
+    }
+
+    // ── NGOs tab ──
+    function renderNgosTab() {
+      document.getElementById('adminNgosGrid').innerHTML =
+        NGOS.map(n => `
+          <div class="card ngo-admin-card ${n.campActive ? 'ngo-border-green' : 'ngo-border-grey'}">
+            <div class="ngo-dir-header">
+              <div class="avatar ${n.campActive ? 'avatar-green' : 'avatar-grey'}">${n.avatar}</div>
+              <div style="flex:1">
+                <div class="ngo-dir-name">${n.name}</div>
+                <div class="ngo-dir-city">📍 ${n.city}</div>
+              </div>
+              <div class="ngo-status-badge ${n.campActive ? 'badge-active' : 'badge-inactive'}">
+                ${n.campActive ? `${n.campsRunning} Camps` : 'Inactive'}
+              </div>
+            </div>
+            <p class="ngo-dir-desc">${n.description}</p>
+            <div class="ngo-mini-tags">
+              ${n.services.map(s =>
+                `<span class="tag tag-${s}">${HELP_TYPES[s].icon} ${HELP_TYPES[s].label}</span>`
+              ).join('')}
+            </div>
+            <div class="ngo-contact">📧 ${n.contact}</div>
+          </div>
+        `).join('');
+    }
+  </script>
+
+</body>
+</html>
