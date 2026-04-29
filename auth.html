@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login / Sign Up — Sahayak Connect</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="auth-body">
+
+  <!-- FULL-SCREEN AUTH LAYOUT -->
+  <div class="auth-page">
+
+    <!-- LEFT PANEL: Branding + info -->
+    <div class="auth-left">
+      <div class="auth-left-inner">
+
+        <!-- Logo -->
+        <div class="brand" style="margin-bottom:40px;cursor:pointer"
+          onclick="window.location='index.html'">
+          <div class="brand-icon brand-icon-lg">🤝</div>
+          <div>
+            <div class="brand-name" style="color:white;font-size:28px">Sahayak</div>
+            <div class="brand-sub" style="color:#a7f3d0">CONNECT</div>
+          </div>
+        </div>
+
+        <h2 class="auth-left-title">
+          Be the bridge between<br />
+          <span style="color:#34d399">need and compassion</span>
+        </h2>
+        <p class="auth-left-desc">
+          Join thousands of volunteers, NGOs, and caring individuals
+          who respond to emergencies every day.
+        </p>
+
+        <!-- Impact badges -->
+        <div class="auth-badges">
+          <div class="auth-badge">❤️ 12,847 Lives Helped</div>
+          <div class="auth-badge">🦺 3,241 Volunteers</div>
+          <div class="auth-badge">🏢 187 NGOs</div>
+        </div>
+
+        <!-- Floating help type cards for visual interest -->
+        <div class="auth-float-cards">
+          <div class="auth-float-card">🍱 Food Assistance</div>
+          <div class="auth-float-card">🏥 Medical Help</div>
+          <div class="auth-float-card">🏠 Shelter</div>
+          <div class="auth-float-card">🩸 Blood Donation</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- RIGHT PANEL: Auth Form -->
+    <div class="auth-right">
+      <div class="auth-form-wrap">
+
+        <!-- Login / Signup Toggle -->
+        <div class="auth-toggle">
+          <button class="auth-toggle-btn active" id="loginToggle"
+            onclick="switchAuthMode('login')">Login</button>
+          <button class="auth-toggle-btn" id="signupToggle"
+            onclick="switchAuthMode('signup')">Sign Up</button>
+        </div>
+
+        <h2 class="auth-form-title" id="authTitle">Welcome Back</h2>
+        <p class="auth-form-sub" id="authSub">Login to your account to continue helping</p>
+
+        <!-- ── QUICK DEMO LOGIN BUTTONS ── -->
+        <div class="demo-section">
+          <div class="demo-label">⚡ One-Click Demo Login</div>
+          <div class="demo-grid">
+            <button class="demo-btn demo-user"
+              onclick="demoLogin('user','Demo User')">👤 User</button>
+            <button class="demo-btn demo-volunteer"
+              onclick="demoLogin('volunteer','Arjun Sharma')">🦺 Volunteer</button>
+            <button class="demo-btn demo-ngo"
+              onclick="demoLogin('ngo','Seva Foundation')">🏢 NGO</button>
+            <button class="demo-btn demo-admin"
+              onclick="demoLogin('admin','Admin')">👑 Admin</button>
+          </div>
+        </div>
+
+        <div class="divider"><span>or continue manually</span></div>
+
+        <!-- Role Selector -->
+        <div class="form-group">
+          <label class="form-label">I am a...</label>
+          <div class="role-grid">
+            <button class="role-btn active" data-role="user"
+              onclick="selectRole(this,'user')">
+              <span>👤</span><span>User</span>
+            </button>
+            <button class="role-btn" data-role="volunteer"
+              onclick="selectRole(this,'volunteer')">
+              <span>🦺</span><span>Volunteer</span>
+            </button>
+            <button class="role-btn" data-role="ngo"
+              onclick="selectRole(this,'ngo')">
+              <span>🏢</span><span>NGO</span>
+            </button>
+            <button class="role-btn" data-role="admin"
+              onclick="selectRole(this,'admin')">
+              <span>👑</span><span>Admin</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Name field (signup only) -->
+        <div class="form-group" id="nameGroup" style="display:none">
+          <label class="form-label">Full Name *</label>
+          <input type="text" class="form-input" id="authName"
+            placeholder="Your full name" />
+        </div>
+
+        <!-- Organisation field (ngo only) -->
+        <div class="form-group" id="orgGroup" style="display:none">
+          <label class="form-label">Organisation Name *</label>
+          <input type="text" class="form-input" id="authOrg"
+            placeholder="Your NGO / Organisation name" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Email *</label>
+          <input type="email" class="form-input" id="authEmail"
+            placeholder="you@example.com" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Password *</label>
+          <input type="password" class="form-input" id="authPassword"
+            placeholder="••••••••" />
+        </div>
+
+        <!-- Submit Button -->
+        <button class="btn btn-primary btn-block btn-lg" id="authSubmitBtn"
+          onclick="handleAuth()">
+          🔐 Login
+        </button>
+
+        <!-- Toggle link -->
+        <p class="auth-switch-text">
+          <span id="authSwitchText">Don't have an account?</span>
+          <a href="#" id="authSwitchLink" onclick="switchAuthMode('signup');return false">
+            Sign Up
+          </a>
+        </p>
+
+        <a href="index.html" class="back-home-link">← Back to Home</a>
+
+      </div>
+    </div>
+
+  </div><!-- /auth-page -->
+
+  <script src="script.js"></script>
+  <script>
+
+    let authMode    = 'login';
+    let selectedRole = 'user';
+
+    // ── Switch login / signup mode ──
+    function switchAuthMode(mode) {
+      authMode = mode;
+      const isSignup = mode === 'signup';
+
+      document.getElementById('loginToggle').classList.toggle('active', !isSignup);
+      document.getElementById('signupToggle').classList.toggle('active', isSignup);
+
+      document.getElementById('authTitle').textContent =
+        isSignup ? 'Create Account' : 'Welcome Back';
+      document.getElementById('authSub').textContent =
+        isSignup ? 'Join Sahayak Connect today' : 'Login to your account to continue';
+
+      document.getElementById('authSubmitBtn').textContent =
+        isSignup ? '🚀 Create Account' : '🔐 Login';
+
+      document.getElementById('authSwitchText').textContent =
+        isSignup ? 'Already have an account?' : "Don't have an account?";
+      document.getElementById('authSwitchLink').textContent =
+        isSignup ? 'Login' : 'Sign Up';
+      document.getElementById('authSwitchLink').onclick =
+        () => { switchAuthMode(isSignup ? 'login' : 'signup'); return false; };
+
+      // Show name field on signup
+      document.getElementById('nameGroup').style.display = isSignup ? 'block' : 'none';
+      // Show org field if NGO + signup
+      document.getElementById('orgGroup').style.display =
+        (isSignup && selectedRole === 'ngo') ? 'block' : 'none';
+    }
+
+    // ── Select role ──
+    function selectRole(btn, role) {
+      document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedRole = role;
+      // Show org field for NGO on signup
+      document.getElementById('orgGroup').style.display =
+        (authMode === 'signup' && role === 'ngo') ? 'block' : 'none';
+    }
+
+    // ── Demo login: skip form, go straight to dashboard ──
+    function demoLogin(role, name) {
+      redirectAfterLogin(role, name);
+    }
+
+    // ── Manual auth handler ──
+    function handleAuth() {
+      const email    = document.getElementById('authEmail').value.trim();
+      const password = document.getElementById('authPassword').value.trim();
+
+      if (!email || !password) {
+        showToast('Please enter email and password', 'error');
+        return;
+      }
+
+      // Derive display name
+      let name = email.split('@')[0];
+      name = name.charAt(0).toUpperCase() + name.slice(1);
+
+      if (authMode === 'signup') {
+        const nameVal = document.getElementById('authName').value.trim();
+        if (!nameVal) { showToast('Please enter your name', 'error'); return; }
+        name = nameVal;
+      }
+
+      showToast(`Welcome, ${name}! 👋`, 'success');
+
+      // Small delay so toast is visible before redirect
+      setTimeout(() => redirectAfterLogin(selectedRole, name), 900);
+    }
+
+    // ── Redirect based on role ──
+    function redirectAfterLogin(role, name) {
+      // Store in sessionStorage so dashboards can greet user
+      sessionStorage.setItem('userName', name);
+      sessionStorage.setItem('userRole', role);
+
+      const destinations = {
+        user:      'index.html',
+        volunteer: 'volunteer.html',
+        ngo:       'ngo.html',
+        admin:     'admin.html'
+      };
+
+      showToast(`Welcome, ${name}! Redirecting... 👋`, 'success');
+      setTimeout(() => {
+        window.location.href = destinations[role] || 'index.html';
+      }, 800);
+    }
+  </script>
+
+</body>
+</html>
